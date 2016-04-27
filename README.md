@@ -32,7 +32,7 @@ It does reveal who users *believe* they're viewing, which makes it a good social
 
 **Interface**: The self-profile is obvious. Assigning a custom name/profile/image to users may still be useful?
 
-### Channel-based proofs
+### Ownership proofs
 
 A user creates an assertion that they own an identity on another channel.
 The assertion is signed by the ssb identity, then published on that channel and on the ssb log.
@@ -43,6 +43,15 @@ This can be applied to: websites/domains, email, twitter, github, reddit, hacker
 The verifications can be published, by other ssb users, to improve the confidence in a proof.
 
 **Interface**: This can be provided as a tool to "bind" your identity to some other account.
+
+### Flow proofs
+
+A user creates a secret token with a recipient in mind.
+Evidence of the token, and the recipient's name, is published on the user's ssb log.
+The user sends the token through any medium they like.
+
+They recipient publishes evidence that they received the token.
+If the sender accepts the evidence, then this becomes an identity proof.
 
 ### Upvotes
 
@@ -105,3 +114,12 @@ They look like:
   }
 }
 ```
+
+## Interface
+
+### Onboarding: Joining Pubs
+
+Joining a Pub is currently handled with an invite code.
+We can improve the pub-invite to be a flow-proof, or bake in email transmission to make it an ownership-proof.
+
+A web ui for Pub signups could use the email-ownership-proof.
