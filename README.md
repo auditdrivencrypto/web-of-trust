@@ -29,6 +29,17 @@ This isn't terribly useful, though, without [unsolicited friend requests](#unsol
 SSB doesn't have any means for unsolicited messages; you have to follow somebody to receive messages from them.
 Could there be a protocol, specifically for creating two-way connections, which allows a user to send their contact info to someone without it being solicited?
 
+### Invite codes
+
+A button on the top right of the SSBMail UI could generate an "invite code."
+
+The user would be provided a form, for filling out who the code is for (making it a [flow-proof](#flow-proofs)).
+The form would then generate a code, which includes a capability to send a "friend request" via the creator's pub.
+
+A recipient would press a button on the top right, "Add contact," then input the invite code there.
+The creator would be pinged, to let them know the invite was used.
+Both users would now follow each other.
+
 ## Identity signals
 
 ### Profile information
