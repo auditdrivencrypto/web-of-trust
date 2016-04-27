@@ -8,6 +8,27 @@ The proofs are aggregated to determine a formal (or informal) probability of aut
 
 The purpose of this document is to discuss interface designs, cryptography protocols, and network protocols.
 
+## Interface
+
+### Onboarding: Joining Pubs
+
+Joining a Pub is currently handled with an invite code.
+We can improve the pub-invite to be a [flow-proof](#flow-proofs), or bake in email transmission to make it an [ownership-proof](#ownership-proofs).
+
+A web ui for Pub signups could use the [email-ownership-proof](#ownership-proofs).
+
+### Onboarding: after joining a Pub
+
+Joining a Pub will cause the user to follow it, and therefore receive any identity signals the Pub has published.
+The user could be shown the signals on the Pub's profile page, as a way to suggest first contacts.
+
+This isn't terribly useful, though, without [unsolicited friend requests](#unsolicited-friend-requests).
+
+### Unsolicited "friend" requests
+
+SSB doesn't have any means for unsolicited messages; you have to follow somebody to receive messages from them.
+Could there be a protocol, specifically for creating two-way connections, which allows a user to send their contact info to someone without it being solicited?
+
 ## Identity signals
 
 ### Profile information
@@ -114,24 +135,3 @@ They look like:
   }
 }
 ```
-
-## Interface
-
-### Onboarding: Joining Pubs
-
-Joining a Pub is currently handled with an invite code.
-We can improve the pub-invite to be a [flow-proof](#flow-proofs), or bake in email transmission to make it an [ownership-proof](#ownership-proofs).
-
-A web ui for Pub signups could use the [email-ownership-proof](#ownership-proofs).
-
-### Onboarding: after joining a Pub
-
-Joining a Pub will cause the user to follow it, and therefore receive any identity signals the Pub has published.
-The user could be shown the signals on the Pub's profile page, as a way to suggest first contacts.
-
-This isn't terribly useful, though, without [unsolicited friend requests](#unsolicited-friend-requests).
-
-### Unsolicited "friend" requests
-
-SSB doesn't have any means for unsolicited messages; you have to follow somebody to receive messages from them.
-Could there be a protocol, specifically for creating two-way connections, which allows a user to send their contact info to someone without it being solicited?
