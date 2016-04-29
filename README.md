@@ -2,13 +2,65 @@
 
 This is a design/discussion document for the Web of Trust used in the secure-scuttlebutt network.
 
+A WoT is a toolset for constructing and collecting credentials to authenticate pubkey identities, and authorize behaviors.
+Unlike Certificate-authority PKI, the WoT does not appoint global authorities for identity; instead, users choose their own authorities, and issue thir own credentials.
+
+
 ## Glossary
 
- - **User**: An agent in the network. In the current version of SSB, a user is identified by a single keypair, and its log. (In future versions, users may be identified by multiple keypairs and logs.)
- - **Identity**: The data assigned to a user that's meant to identify who they are, and make them discoverable to friends/colleagues. Includes information like name, email address, bio, etc. Identity data must be verified (see Authentication).
- - **Right**: A permission to use some resource or trigger some behavior.
- - **Credential**: A datum used to confirm an identity or authorize a right. Each credential's validity depends on the trust placed in the credential's creator. A credential could be a signed statement about the user's pubkey, or a capability string.
- - **Credentialing policy**: The rules for validating a specific credential, including who is allowed to create the credential, and how many credentials are required.
+ - **User**: An agent in the network. In the current version of SSB, a user is identified by a single keypair and log.
+ - **Identity**: All data which describes a user. Usually meant to identify who they are, and make them discoverable to friends/colleagues. Includes information like name, email address, bio, etc.
+ - **Rights**: Permission to use some resource or behavior.
+ - **Credential**: A datum used to validate identity or rights. Each credential's validity depends on the trust placed in the credential's creator. A credential could be a signed statement about the user's pubkey, or a capability string.
+ - **Credential policy**: The rules for validating a specific credential, including who is allowed to create the credential, and how many credentials are required.
+
+Some example usages:
+
+ - "Based on these credentials, I am confident that this pubkey is Bob Robertson's."
+ - "I'm updating my credential policy to trust Alice to identify users correctly."
+
+## Background
+
+The Web-of-Trust was first used by PGP, and [can be read about here](http://www.pgpi.org/doc/pgpintro/#p17) (recommended).
+Not all of PGP's concepts will translate to SSB, but many will. 
+Here are some useful excerpts:
+
+> ### Digital certificates
+
+> In a public key environment, it is vital that you are assured that the public key to which you are encrypting data is in fact the public key of the intended recipient and not a forgery. Digital certificates, or certs, simplify the task of establishing whether a public key truly belongs to the purported owner.
+
+> A certificate is a form of credential. Examples might be your driver's license, your social security card, or your birth certificate. Each of these has some information on it identifying you and some authorization stating that someone else has confirmed your identity. 
+
+> ### Validity and trust
+
+> Every user in a public key system is vulnerable to mistaking a phony key (certificate) for a real one. *Validity* is confidence that a public key certificate belongs to its purported owner.
+
+> When you've assured yourself that a certificate belonging to someone else is valid, you can sign the copy on your keyring to attest to the fact that you've checked the certificate and that it's an authentic one. If you want others to know that you gave the certificate your stamp of approval, you can export the signature to a certificate server so that others can see it.
+
+> Some companies designate one or more Certification Authorities (CAs) to indicate certificate validity. It is the job of the CA to issue certificates to users — a process which generally entails responding to a user's request for a certificate. Basically, the main purpose of a CA is to bind a public key to the identification information contained in the certificate and thus assure third parties that some measure of care was taken to ensure that this binding of the identification information and key is valid.
+
+> #### Establishing trust
+
+> You validate certificates. You trust people. More specifically, you trust people to validate other people' certificates. Typically, unless the owner hands you the certificate, you have to go by someone else's word that it is valid.
+
+> In relatively closed systems, such as within a small company, it is easy to trace a certification path back to the root CA. However, users must often communicate with people outside of their corporate environment, including some whom they have never met, such as vendors, customers, clients, associates, and so on. Establishing a line of trust to those who have not been explicitly trusted by your CA is difficult.
+
+> **Direct Trust**
+Direct trust is the simplest trust model. In this model, a user trusts that a key is valid because he or she knows where it came from. All cryptosystems use this form of trust in some way. For example, in web browsers, the root Certification Authority keys are directly trusted because they were shipped by the manufacturer. If there is any form of hierarchy, it extends from these directly trusted certificates.
+
+> **Hierarchical Trust**
+In a hierarchical system, there are a number of "root" certificates from which trust extends. These certificates may certify certificates themselves, or they may certify certificates that certify still other certificates down some chain. Consider it as a big trust "tree." The "leaf" certificate's validity is verified by tracing backward from its certifier, to other certifiers, until a directly trusted root certificate is found.
+
+> **Web of Trust**
+A web of trust encompasses both of the other models, but also adds the notion that trust is in the eye of the beholder (which is the real-world view) and the idea that more information is better. It is thus a cumulative trust model. A certificate might be trusted directly, or trusted in some chain going back to a directly trusted root certificate (the meta-introducer), or by some group of introducers.
+
+> In a PGP environment, any user can act as a certifying authority. Any PGP user can validate another PGP user's public key certificate. However, such a certificate is only valid to another user if the relying party recognizes the validator as a trusted introducer. (That is, you trust my opinion that others' keys are valid only if you consider me to be a trusted introducer. Otherwise, my opinion on other keys' validity is moot.)
+
+> Stored on each user's public keyring are indicators of
+> - whether or not the user considers a particular key to be valid
+> - the level of trust the user places on the key that the key's owner can serve as certifier of others' keys
+
+> You indicate, on your copy of my key, whether you think my judgement counts. It's really a reputation system: certain people are reputed to give good signatures, and people trust them to attest to other keys' validity.
 
 ## Applications of the WoT
 
