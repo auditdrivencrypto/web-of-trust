@@ -2,7 +2,7 @@
 
 This is a design/discussion document for the Web of Trust used in the secure-scuttlebutt network.
 
-A WoT is a toolset for constructing and collecting credentials to authenticate pubkey identities, and authorize behaviors.
+A WoT is a toolset for constructing and collecting credentials to authenticate pubkey identities, and authorize permissions.
 Unlike Certificate-authority PKI, the WoT does not appoint global authorities for identity; instead, users choose their own authorities, and issue thir own credentials.
 
 
@@ -13,11 +13,14 @@ Unlike Certificate-authority PKI, the WoT does not appoint global authorities fo
  - **Rights**: Permission to use some resource or behavior.
  - **Credential**: A datum used to validate identity or rights. Each credential's validity depends on the trust placed in the credential's creator. A credential could be a signed statement about the user's pubkey, or a capability string.
  - **Credential policy**: The rules for validating a specific credential, including who is allowed to create the credential, and how many credentials are required.
+ - **Introducer**: A user who has been trusted to issue credentials. "Certificate Authorities" are introducers. In the WoT, there are no global authorities, so "Introducer" feels like a better term to use.
+ - **Delegation**: Attribution of authority to another user. "I trust X to do Y."
 
 Some example usages:
 
  - "Based on these credentials, I am confident that this pubkey is Bob Robertson's."
  - "I'm updating my credential policy to trust Alice to identify users correctly."
+   - aka "I'm delegating introductions to Alice."
 
 ## Background
 
@@ -71,7 +74,7 @@ Authentication is the process of verifying the identity of a user via trusted cr
 The credential policy in CA PKI is hierarchical, and eminates down from the root CAs.
 A new credential is considered valid if it presents an unbroken signature chain between the new credential, (optionally) through intermediary CAs, and terminating at a root CA.
 
-In a WoT, the credential policy is set by each user; there are no global authorities.
+In a WoT, the credential policy is set by each user; there are no root CAs.
 You appoint other users as "CAs," and can assign varying levels of trust.
 See: [Validity and trust in PGP](http://www.pgpi.org/doc/pgpintro/#p17).
 
@@ -87,23 +90,40 @@ The credential-policy for authorization may depend on the resource/behavior, or 
 Some example policies:
 
  - **Requires successful authentication**. If the requester can prove to have an accountable identity, that's good enough. This is the policy of websites that require a valid email or facebook-account to signup, for instance.
- - **Requires trusted rights assignment**. If the resource-owner has assigned rights to the requester, or a trusted peer of the reosurce owner has assigned rights to the requester, that's good enough.
+ - **Requires trusted rights assignment**. If the resource-owner has assigned rights to the requester, or a trusted peer of the resource owner has assigned rights to the requester, that's good enough.
  - **Requires a capability string.** If the requester holds a valid capability string, that's good enough.
 
-An example of when WoT authorization is useful, is for an introduction protocol, when a user wants to establish contact with a new friend.
-This is effectively a matter of spam-prevention.
+## Discussion
 
-## PGP vs SSB
+### Scaling the WoT
 
-### Discovery during introductions
+The WoT has a natural growth-boundary, at the edge of each user's social graph.
+Total strangers -- users with no overlap in who they trust -- are not able to make introductions to each other.
+And, of course, every new user is a stranger to everybody, as far as the WoT is concerned.
 
-One of the challenges for handling introductions in a WoT is discovering a pathway between two strangers.
-If there is no trusted verification already available, then it can be unclear how to get the verifications you need.
+How can this be solved?
 
-In the hieararchical CA model, this is handled by using (mostly) universal root CAs.
-If you need an intro to a stranger, you can have one of the shared roots (or their intermediaries) provide a new verification.
-In a WoT, each user can choose their own trusted introducers; so, the "CA" must be discovered on a case-by-case basis.
+#### Invite codes
 
-One advantage of SSB over PGP is, SSB can distribute the validations and trust-policies of each user.
-A user looking for an intro can download the log of their target user.
-This gives them a way to discover the introducers or policies needed to make a new connection.
+Invite codes are capability-strings which can be emailed, IMed, etc, to a target user.
+They allow any two users to credential each other.
+
+#### Automated CREdentialing Services (ACREs)
+
+There are some kinds of credentials that can be verified automatically, such as ownership of an email or web account.
+(Consider: most web services verify an email, phone, or twitter/gh/facebook account as a prerequisite for signup.
+The cheaper SSL certificates only verify control of an email, and of the host & dns entry.)
+
+Having bot-users on ssb which verify these kinds of credentials, and publish the verification, would be handy for automating introductions between strangers.
+
+#### Introducer-discovery through ssb logs
+
+The hieararchical CA model benefits from being a static shared configuration.
+But, in the Web-of-Trust, the "CAs" are unique to each user.
+So, you need to discover which introducers a stranger uses.
+
+This can be solved by publishing your trust-delegations on the ssb log.
+A stranger would download the log, read the delegations, and then get credentialed by those users.
+
+This is only useful if you delegate to an ACRE, or to somebody who's business it is to credential strangers.
+Otherwise, the delegations will just be a list of your friends, that dont want to be bothered either.
