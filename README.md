@@ -97,14 +97,14 @@ Invite codes are capability-strings which can be emailed or IMed to a target use
 They allow any two users to credential each other without an existing connection.
 
 Invite codes are a reliable way to intro new users into the network.
-They are effective, but tedious.
 They require users to have a private, trustable channel to each other.
+They are effective, but don't scale well.
 
 **Automated Introducers**
 
 There are some kinds of credentials that can be verified automatically, such as ownership of an email, phone number, or web host.
-Having bot-users on ssb which do this, and publish the verifications, would be handy for introducing strangers.
-With a trusted auto-introducer, you'd be able to lookup users by these verifications.
+Having bot-users on ssb which do this, and publish the verifications, would be handy for introducing strangers, and for improving confidence in known users.
+With a trusted auto-introducer, you'd be able to lookup new contacts by these verifications.
 
 **Introducer-discovery through ssb logs**
 
@@ -114,6 +114,3 @@ So, you need to discover which introducers a stranger uses to be properly creden
 
 This can be solved by publishing the trust-delegations on the ssb log.
 A stranger would download the log, read the delegations, and then get credentialed by those users.
-
-(This is only useful if you delegate to an automated introducer, or to somebody who's business it is to credential strangers.
-Otherwise, the delegations will just be a list of your friends, who dont really want to be bothered.)
