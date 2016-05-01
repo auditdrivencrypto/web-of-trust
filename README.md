@@ -9,18 +9,12 @@ Unlike Certificate-authority PKI, the WoT does not appoint global authorities fo
 ## Glossary
 
  - **User**: An agent in the network. In the current version of SSB, a user is identified by a single keypair and log.
- - **Identity**: All data which describes a user. Usually meant to identify who they are, and make them discoverable to friends/colleagues. Includes information like name, email address, bio, etc.
- - **Rights**: Permission to use some resource or behavior.
- - **Credential**: A datum used to validate identity or rights. Each credential's validity depends on the trust placed in the credential's creator. A credential could be a signed statement about the user's pubkey, or a capability string.
- - **Credential policy**: The rules for validating a specific credential, including who is allowed to create the credential, and how many credentials are required.
- - **Introducer**: A user who has been trusted to issue credentials. "Certificate Authorities" are introducers. In the WoT, there are no global authorities, so "Introducer" feels like a better term to use.
- - **Delegation**: Attribution of authority to another user. "I trust X to do Y."
-
-Some example usages:
-
- - "Based on these credentials, I am confident that this pubkey is Bob Robertson's."
- - "I'm updating my credential policy to trust Alice to identify users correctly."
-   - aka "I'm delegating introductions to Alice."
+ - **Identity**: All data which describes a user. Includes information like name, email address, bio, etc.
+ - **Rights**: Permissions to use some resource or behavior.
+ - **Credential**: A datum which attributes identity information or permissions to a user. Each credential's validity depends on the trust placed in the credential's creator.
+ - **Credential policy**: The rules for validating a specific credential, including who is allowed to create the credential, and what kind of credentials are allowed.
+ - **Introducer**: A user who has been trusted to issue identity credentials.
+ - **Delegation**: A declaration of trust in another user, to issue some kind of credential.
 
 ## Background
 
