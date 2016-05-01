@@ -89,23 +89,16 @@ To be introduced to a new person, you need a trusted credential for them; if the
 
 This is a bootstrapping problem.
 If there's no existing connection, then how do you create one?
-Trusting the identity of a total stranger would be like accepting a self-signed certificate.
-
-Until you are well-connected, this is a very common problem.
-A new user in the network has no connections at all.
-
-How can this be solved?
+If you're a new user, how do you create your *first* connection?
 
 **Invite codes**
 
 Invite codes are capability-strings which can be emailed or IMed to a target user.
-They allow any two users to credential each other.
+They allow any two users to credential each other without an existing connection.
 
-Invite codes are effective but tedious.
-They require users to have a private, trusted channel to each other.
-And, they require the users to walk through manual processes.
-
-Invite codes are probably the best way to intro a completely new user into the network.
+Invite codes are a reliable way to intro new users into the network.
+They are effective, but tedious.
+They require users to have a private, trustable channel to each other.
 
 **Automated Introducers**
 
