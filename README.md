@@ -2,16 +2,14 @@
 
 This is a design/discussion document for the Web of Trust used in the secure-scuttlebutt network.
 
-A WoT is a toolset for constructing and collecting credentials to authenticate pubkey identities, and authorize permissions.
+A WoT is a toolset for constructing and collecting credentials to authenticate pubkey identities.
 Unlike Certificate-authority PKI, the WoT does not appoint global authorities for identity; instead, users choose their own authorities, and issue thir own credentials.
-
 
 ## Glossary
 
  - **User**: An agent in the network. In the current version of SSB, a user is identified by a single keypair and log.
  - **Identity**: All data which describes a user. Includes information like name, email address, bio, etc.
- - **Rights**: Permissions to use some resource or behavior.
- - **Credential**: A datum which attributes identity information or permissions to a user. Each credential's validity depends on the trust placed in the credential's creator.
+ - **Credential**: A datum which attributes identity information to a user. Each credential's validity depends on the trust placed in the credential's creator.
  - **Credential policy**: The rules for validating a specific credential, including who is allowed to create the credential, and what kind of credentials are allowed.
  - **Introducer**: A user who has been trusted to issue identity credentials.
  - **Delegation**: A declaration of trust in another user, to issue some kind of credential.
@@ -45,27 +43,6 @@ In a hierarchical system, there are a number of "root" certificates from which t
 
 > **Web of Trust**
 A web of trust encompasses both of the other models, but also adds the notion that trust is in the eye of the beholder (which is the real-world view) and the idea that more information is better. It is thus a cumulative trust model. A certificate might be trusted directly, or trusted in some chain going back to a directly trusted root certificate (the meta-introducer), or by some group of introducers.
-
-## Applications of the WoT
-
-**Authentication**
-
-Authentication is the process of verifying the identity of a user via trusted credentials.
-
-In a WoT, the credential policy is set by each user; there are no root CAs.
-You delegate trust in other users' credentials.
-The users you delegate to are your "introducers."
-
-**Authorization**
-
-Authorization is the process of giving rights over a resource or behavior to a user via trusted credentials.
-
-The credential-policy for authorization may depend on the resource/behavior, or the specific user.
-Some example policies:
-
- - **Requires successful authentication**. If the requester can prove to have an accountable identity, that's good enough. This is the policy of websites that require a valid email or facebook-account to signup, for instance.
- - **Requires trusted rights assignment**. If the resource-owner has assigned rights to the requester, or a trusted peer of the resource owner has assigned rights to the requester, that's good enough.
- - **Requires a capability string.** If the requester holds a valid capability string, that's good enough.
 
 ## Discussion
 
