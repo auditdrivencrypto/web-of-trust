@@ -46,32 +46,74 @@ A web of trust encompasses both of the other models, but also adds the notion th
 
 ## Discussion
 
+### Introductions
+
+When you want to meet somebody for the first time, you need to have an introduction.
+Usually you have a mutual acquaintance do the introduction for you.
+That way, you know you've found the right person.
+
+In SSB, the same process applies for contacting new people.
+You look for mutual friends who can identify your new acquaintance.
+That way, you know you're sending messages to the right person.
+
+**Why does SSB need introductions?**
+
+Email works without an "introduction" process.
+You just find the person's address and send the email.
+Why does SSB need it?
+
+The answer is that SSB has a higher standard of security than email has.
+Email entrusts the email-hosts to correctly identify its users and send their messages privately.
+But there's no builtin protection from the hosts making mistakes, getting hacked, or selling you out.
+If the host wants to send your email straight to Russia, it can.
+
+(Somewhat more troubling is, the email transport protocol is so [laughably insecure](https://blog.filippo.io/the-sad-state-of-smtp-encryption/) that most messages can be passively read over the wire.
+[Gmail is taking steps to improve this](https://support.google.com/mail/answer/6330403?p=tls&hl=en&rd=1), but it's not at all solved.)
+
+SSB is designed to let you transmit sensitive information, such as system credentials, legal documents, and medical information.
+It entrusts *nobody except the recipient* with the message content.
+To do this, it's not enough to trust the email host to route a message privately;
+you need to use independent confirmations of the recipient's identity, and use end-to-end encryption to keep the message content private.
+
+SSB's Web-of-Trust is a tool for confirming your recipients' identities.
+It gathers multiple overlapping confirmations from your contact list, most of whom you should know personally.
+It provides a reasonable expectation of privacy on the public Internet, without relying on firewalls or on-site servers.
+
 ### Introducing strangers
 
+When you go to the bank, you need to introduce yourself to a total stranger (the teller).
+And, it's very important they identify you correctly!
+So, you usually rely on two forms of trusted credentials: your debit card, and your driver's license.
+
+SSB has a need for the same process.
 The WoT has a natural scaling-boundary for each user, at the edge of their personal network.
 To be introduced to a new person, you need a trusted credential for them; if the user's a stranger, then none of your introducers will have issued one.
-Trusting the identity of a total stranger, in this case, would be like accepting a self-signed certificate for them.
 
 This is a bootstrapping problem.
 If there's no existing connection, then how do you create one?
+Trusting the identity of a total stranger would be like accepting a self-signed certificate.
 
-Until you are well-connected, this will be a common problem.
-A new user in the network has no connections at all; all users are strangers.
+Until you are well-connected, this is a very common problem.
+A new user in the network has no connections at all.
 
 How can this be solved?
 
 **Invite codes**
 
-Invite codes are capability-strings which can be emailed, IMed, etc, to a target user.
+Invite codes are capability-strings which can be emailed or IMed to a target user.
 They allow any two users to credential each other.
 
-**Automated CREdentialing Services (ACREs)**
+Invite codes are effective but tedious.
+They require users to have a private, trusted channel to each other.
+And, they require the users to walk through manual processes.
+
+Invite codes are probably the best way to intro a completely new user into the network.
+
+**Automated Introducers**
 
 There are some kinds of credentials that can be verified automatically, such as ownership of an email, phone number, or web host.
-(Most web services and SSL cert-issuers do this during signup.)
-
 Having bot-users on ssb which do this, and publish the verifications, would be handy for introducing strangers.
-With a trusted ACRE, you'd be able to lookup users by these verifications.
+With a trusted auto-introducer, you'd be able to lookup users by these verifications.
 
 **Introducer-discovery through ssb logs**
 
@@ -82,5 +124,5 @@ So, you need to discover which introducers a stranger uses to be properly creden
 This can be solved by publishing the trust-delegations on the ssb log.
 A stranger would download the log, read the delegations, and then get credentialed by those users.
 
-(This is only useful if you delegate to an ACRE, or to somebody who's business it is to credential strangers.
+(This is only useful if you delegate to an automated introducer, or to somebody who's business it is to credential strangers.
 Otherwise, the delegations will just be a list of your friends, who dont really want to be bothered.)
