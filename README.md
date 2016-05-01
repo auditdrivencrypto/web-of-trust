@@ -48,22 +48,15 @@ A web of trust encompasses both of the other models, but also adds the notion th
 
 ## Applications of the WoT
 
-### Authentication
+**Authentication**
 
 Authentication is the process of verifying the identity of a user via trusted credentials.
 
-The credential policy in CA PKI is hierarchical, and eminates down from the root CAs.
-A new credential is considered valid if it presents an unbroken signature chain between the new credential, (optionally) through intermediary CAs, and terminating at a root CA.
-
 In a WoT, the credential policy is set by each user; there are no root CAs.
-You appoint other users as "CAs," and can assign varying levels of trust.
-See: [Validity and trust in PGP](http://www.pgpi.org/doc/pgpintro/#p17).
+You delegate trust in other users' credentials.
+The users you delegate to are your "introducers."
 
-> For example, suppose your key ring contains Alice's key. You have validated Alice's key and you indicate this by signing it. You know that Alice is a real stickler for validating others' keys. You therefore assign her key with Complete trust. This makes Alice a Certification Authority. If Alice signs another's key, it appears as Valid on your keyring.
-
-> PGP requires one Completely trusted signature or two Marginally trusted signatures to establish a key as valid. PGP's method of considering two Marginals equal to one Complete is similar to a merchant asking for two forms of ID. You might consider Alice fairly trustworthy and also consider Bob fairly trustworthy. Either one alone runs the risk of accidentally signing a counterfeit key, so you might not place complete trust in either one. However, the odds that both individuals signed the same phony key are probably small.
-
-### Authorization
+**Authorization**
 
 Authorization is the process of giving rights over a resource or behavior to a user via trusted credentials.
 
