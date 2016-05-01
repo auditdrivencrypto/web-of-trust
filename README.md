@@ -15,6 +15,7 @@ Unlike Certificate-authority PKI, the WoT does not appoint global authorities fo
  - **Credential policy**: The rules for validating a specific credential, including who is allowed to create the credential, and how many credentials are required.
  - **Introducer**: A user who has been trusted to issue credentials. "Certificate Authorities" are introducers. In the WoT, there are no global authorities, so "Introducer" feels like a better term to use.
  - **Delegation**: Attribution of authority to another user. "I trust X to do Y."
+ - **Stranger**: A user with no *trusted* credentials. Strangers occur when two users are trying to introduce to each other, but there's not yet any overlap in their WoT.
 
 Some example usages:
 
@@ -95,35 +96,41 @@ Some example policies:
 
 ## Discussion
 
-### Scaling the WoT
+### Introducing strangers
 
-The WoT has a natural growth-boundary, at the edge of each user's social graph.
-Total strangers -- users with no overlap in who they trust -- are not able to make introductions to each other.
-And, of course, every new user is a stranger to everybody, as far as the WoT is concerned.
+The WoT has a natural scaling-boundary for each user, at the edge of their personal network.
+To be introduced to a new person, you need a trusted credential for them; if the user's a stranger, then none of your introducers will have issued one.
+Trusting the identity of a total stranger, in this case, would be like accepting a self-signed certificate for them.
+
+This is a bootstrapping problem.
+If there's no existing connection, then how do you create one?
+
+Until you are well-connected, this will be a common problem.
+A new user in the network has no connections at all; all users are strangers.
 
 How can this be solved?
 
-#### Invite codes
+**Invite codes**
 
 Invite codes are capability-strings which can be emailed, IMed, etc, to a target user.
 They allow any two users to credential each other.
 
-#### Automated CREdentialing Services (ACREs)
+**Automated CREdentialing Services (ACREs)**
 
-There are some kinds of credentials that can be verified automatically, such as ownership of an email or web account.
-(Consider: most web services verify an email, phone, or twitter/gh/facebook account as a prerequisite for signup.
-The cheaper SSL certificates only verify control of an email, and of the host & dns entry.)
+There are some kinds of credentials that can be verified automatically, such as ownership of an email, phone number, or web host.
+(Most web services and SSL cert-issuers do this during signup.)
 
-Having bot-users on ssb which verify these kinds of credentials, and publish the verification, would be handy for automating introductions between strangers.
+Having bot-users on ssb which do this, and publish the verifications, would be handy for introducing strangers.
+With a trusted ACRE, you'd be able to lookup users by these verifications.
 
-#### Introducer-discovery through ssb logs
+**Introducer-discovery through ssb logs**
 
 The hieararchical CA model benefits from being a static shared configuration.
-But, in the Web-of-Trust, the "CAs" are unique to each user.
-So, you need to discover which introducers a stranger uses.
+But, in the Web-of-Trust, the introducers are unique to each user.
+So, you need to discover which introducers a stranger uses to be properly credentialed.
 
-This can be solved by publishing your trust-delegations on the ssb log.
+This can be solved by publishing the trust-delegations on the ssb log.
 A stranger would download the log, read the delegations, and then get credentialed by those users.
 
-This is only useful if you delegate to an ACRE, or to somebody who's business it is to credential strangers.
-Otherwise, the delegations will just be a list of your friends, that dont want to be bothered either.
+(This is only useful if you delegate to an ACRE, or to somebody who's business it is to credential strangers.
+Otherwise, the delegations will just be a list of your friends, who dont really want to be bothered.)
