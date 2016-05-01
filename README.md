@@ -74,10 +74,6 @@ Most messages can be passively read over the wire.
 SSB is designed to let you transmit sensitive information, such as system credentials, legal documents, and medical information.
 It entrusts *nobody except the recipient* with the message content, using independent confirmations of the recipient's identity, and end-to-end encryption.
 
-SSB's Web-of-Trust is a tool for confirming a recipient's identity.
-It gathers multiple overlapping confirmations from your contact list, most of whom you should know personally.
-It provides a reasonable expectation of privacy on the public Internet, without relying on firewalls or on-site servers.
-
 ### Introducing strangers
 
 When you go to the bank, you need to introduce yourself to the teller.
