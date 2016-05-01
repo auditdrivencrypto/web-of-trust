@@ -3,22 +3,22 @@
 This is a design/discussion document for the Web of Trust used in the secure-scuttlebutt network.
 
 A WoT is a toolset for constructing and collecting credentials to authenticate pubkey identities.
-Unlike Certificate-authority PKI, the WoT does not appoint global authorities for identity; instead, users choose their own authorities, and issue thir own credentials.
+Unlike Certificate-authority PKI, the WoT does not appoint global authorities for identity; instead, users choose their own authorities, and issue their own credentials.
 
 ## Glossary
 
- - **User**: An agent in the network. In the current version of SSB, a user is identified by a single keypair and log.
+ - **User**: An agent in the network. In SSB, a user consists of a keypair and log.
  - **Identity**: All data which describes a user. Includes information like name, email address, bio, etc.
  - **Credential**: A datum which attributes identity information to a user. Each credential's validity depends on the trust placed in the credential's creator.
- - **Credential policy**: The rules for validating a specific credential, including who is allowed to create the credential, and what kind of credentials are allowed.
- - **Introducer**: A user who has been trusted to issue identity credentials.
- - **Delegation**: A declaration of trust in another user, to issue some kind of credential.
- - **Stranger**: A user with no trusted credentials. Strangers occur when two users are trying to introduce to each other, but there's not yet any overlap in their WoT.
+ - **Credential policy**: The rules for validating a specific credential, including who is allowed to create the credential, and what kind of credentials are accepted.
+ - **Delegation**: A declaration of trust in a user to issue credentials.
+ - **Introducer**: A user who has been trusted to issue credentials.
+ - **Stranger**: A user with no trusted credentials.
 
 ## Background
 
 The Web-of-Trust was first used by PGP, and [can be read about here](http://www.pgpi.org/doc/pgpintro/#p17) (recommended).
-Not all of PGP's concepts will translate to SSB, but many will. 
+Not all of PGP's concepts will translate to SSB (for instance, SSB doesnt use "certificates") but many will. 
 Here are some useful excerpts:
 
 > ### Digital certificates
@@ -48,12 +48,12 @@ A web of trust encompasses both of the other models, but also adds the notion th
 
 ### Introductions
 
-When you want to meet somebody for the first time, you need to have an introduction.
-Usually you have a mutual acquaintance do the introduction for you.
+When you want to meet somebody for the first time, you need to be introduced.
+Usually, you have a mutual acquaintance do it for you.
 That way, you know you've found the right person.
 
 In SSB, the same process applies for contacting new people.
-You look for mutual friends who can identify your new acquaintance.
+You look for mutual friends who can identify users in the network.
 That way, you know you're sending messages to the right person.
 
 **Why does SSB need introductions?**
@@ -63,27 +63,25 @@ You just find the person's address and send the email.
 Why does SSB need it?
 
 The answer is that SSB has a higher standard of security than email has.
-Email entrusts the email-hosts to correctly identify its users and send their messages privately.
-But there's no builtin protection from the hosts making mistakes, getting hacked, or selling you out.
+Email entrusts the email hosts to correctly identify its users and send their messages privately.
+But there's no builtin protection against hosts making mistakes, getting hacked, or selling you out.
 If the host wants to send your email straight to Russia, it can.
 
-(Somewhat more troubling is, the email transport protocol is so [laughably insecure](https://blog.filippo.io/the-sad-state-of-smtp-encryption/) that most messages can be passively read over the wire.
-[Gmail is taking steps to improve this](https://support.google.com/mail/answer/6330403?p=tls&hl=en&rd=1), but it's not at all solved.)
+(Somewhat more troubling is, [the email transport protocol is not secure](https://blog.filippo.io/the-sad-state-of-smtp-encryption/).
+Most messages can be passively read over the wire.
+[Gmail is taking steps to improve this](https://support.google.com/mail/answer/6330403?p=tls&hl=en&rd=1), but it's not solved.)
 
 SSB is designed to let you transmit sensitive information, such as system credentials, legal documents, and medical information.
-It entrusts *nobody except the recipient* with the message content.
-To do this, it's not enough to trust the email host to route a message privately;
-you need to use independent confirmations of the recipient's identity, and use end-to-end encryption to keep the message content private.
+It entrusts *nobody except the recipient* with the message content, using independent confirmations of the recipient's identity, and end-to-end encryption.
 
-SSB's Web-of-Trust is a tool for confirming your recipients' identities.
+SSB's Web-of-Trust is a tool for confirming a recipient's identity.
 It gathers multiple overlapping confirmations from your contact list, most of whom you should know personally.
 It provides a reasonable expectation of privacy on the public Internet, without relying on firewalls or on-site servers.
 
 ### Introducing strangers
 
-When you go to the bank, you need to introduce yourself to a total stranger (the teller).
-And, it's very important they identify you correctly!
-So, you usually rely on two forms of trusted credentials: your debit card, and your driver's license.
+When you go to the bank, you need to introduce yourself to the teller.
+To do this, you show them your debit card and driver's license, which are two independent trusted forms of identification.
 
 SSB has a need for the same process.
 The WoT has a natural scaling-boundary for each user, at the edge of their personal network.
