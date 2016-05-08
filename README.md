@@ -35,6 +35,45 @@ This is useful for users that want extra protection for key distribution, or for
  - **User**: In SSB, a user consists of a keypair and log.
  - **Pub**: A server in SSB. Pubs are users.
  - **Identity**: The data which describes a user (name, bio, etc).
- - **Verification**: Identity data which was verified through a trusted channel. A verification's validity depends on the trust placed in its publisher.
+ - **Verification**: Identity data which was verified through a trusted channel.
  - **Trust**: A measure of whether data published by a user will be used without outside verification.
  - **Authority**: A user which has been trusted.
+
+## Verifications
+
+Verifications are a tool for confirming somebody's identity within *reasonable* certainty.
+Specifically, a verification is used to tie a name (or some other identity datum) to a pubkey.
+They are not fool-proof, which is why it's a good idea to accumulate verifications.
+
+### Invite-code verifications
+
+"Invite-codes" are a tool used in SSB to give Pub-membership to users.
+They include connection information about the Pub, as well as the seed for producing a One-Time-Use Keypair.
+The OTU Keypair is used as a [capability string](https://en.wikipedia.org/wiki/Capability-based_security).
+The code-recipient uses the keypair to authenticate with the Pub, and then is given rights to command the Pub to follow their main Keypair.
+
+Invite-codes are sent using a trusted-enough medium, such as email, SMS, or a web service PM.
+This is a similar flow to most Web-service signups, which send confirmation links to the new user's email inbox.
+The sender should have reasonable certainty that the code is going to its intended recipient.
+IRC's private messaging, for instance, is riskier than email or SMS, because IRC is very lax about its username ownership.
+
+To use Invites as a verification, the Pub admin should publish an "Invite Announcement" message on the Pub log noting the following information:
+
+ - The OTU Kepair's public key.
+ - The name of the recipient of the Invite code.
+
+The recipient will download that message, confirm that the name is correct, and use the Invite to join the Pub.
+After joining the Pub, the recipient will publish a "Invite Accepted" message on their own log with the following information:
+
+ - The ID of the Pub's Invite Announcement message.
+ - The name which the recipient confirmed.
+ - A signature proving ownership of the OTU Keypair on the Invite-code.
+
+Likewise, the Pub will publish a "Invite Used" message with the following information:
+
+ - The ID of the Pub's Invite Announcement message.
+ - The public key of the recipient who used the Invite code.
+
+We now have overlapping confirmations of the new identity.
+The Pub asserts the OTU Keypair, recipient's name, and recipient's pubkey; the recipient confirms ownership of the OTU Keypair, and confirms the asserted name.
+Users who trust the Pub to handle Invites can now add the identity information to their database.
